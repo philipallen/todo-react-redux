@@ -1,15 +1,22 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectTodoItems, addTodoItem, deleteTodoItem } from "./todoListSlice";
+import {
+  selectTodoItems,
+  addTodoItem,
+  deleteTodoItem,
+  completeTodoItem,
+} from "./todoListSlice";
 import * as S from "./TodoList.styled";
 
 export function TodoList() {
   const todoItems = useSelector(selectTodoItems);
   const [todoInputValue, setTodoInputValue] = useState("");
   const dispatch = useDispatch();
-  // const [incrementAmount, setIncrementAmount] = useState("2");
 
   const handleTodoInputChange = (e) => setTodoInputValue(e?.target?.value);
+
+  const handleStatusChange = (e, itemId) =>
+    dispatch(completeTodoItem({ isChecked: e?.target?.checked, itemId }));
 
   return (
     <div>
@@ -21,12 +28,16 @@ export function TodoList() {
         Add
       </S.AddButton>
       {todoItems.map((todoItem, i) => (
-        <>
-          <S.TodoItem key={i}>{todoItem.title}</S.TodoItem>
+        <div key={i}>
+          <S.Status
+            type="checkbox"
+            onChange={(e) => handleStatusChange(e, todoItem.id)}
+          ></S.Status>
+          <S.TodoItem>{todoItem.title}</S.TodoItem>
           <S.DeleteButton onClick={() => dispatch(deleteTodoItem(todoItem.id))}>
             Delete
           </S.DeleteButton>
-        </>
+        </div>
       ))}
 
       {/* <div>

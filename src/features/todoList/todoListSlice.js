@@ -25,15 +25,13 @@ export const todoListSlice = createSlice({
         }),
         1
       );
-      // TODO this might not work
     },
     completeTodoItem: (state, action) => {
-      const itemId = action.payload;
+      const itemId = action.payload?.itemId;
       const items = state.todoItems;
       items.forEach((item) => {
-        // TODO refactor this:
         if (item.id === itemId) {
-          item.isComplete = true;
+          item.isComplete = action.payload?.isChecked;
         }
       });
     },

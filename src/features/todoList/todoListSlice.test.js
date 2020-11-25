@@ -2,6 +2,7 @@ import todoListReducer, {
   initialState,
   addTodoItem,
   deleteTodoItem,
+  completeTodoItem,
 } from "./todoListSlice";
 
 describe("addTodoItem", () => {
@@ -52,6 +53,19 @@ describe("addTodoItem", () => {
       );
     });
 
+    describe("when you mark the item as complete", () => {
+      beforeEach(() => {
+        newState = todoListReducer(
+          stateWithItems,
+          completeTodoItem({ isChecked: true, itemId: itemIdToDelete })
+        );
+      });
+
+      it("should set it as complete in the store", () => {
+        expect(newState.todoItems[0].isComplete).toBe(true);
+      });
+    });
+
     describe("when you delete the item", () => {
       beforeEach(() => {
         newState = todoListReducer(
@@ -85,6 +99,19 @@ describe("addTodoItem", () => {
         stateWithItems,
         deleteTodoItem(itemIdToDelete)
       );
+    });
+
+    describe("when you mark the second item as complete", () => {
+      beforeEach(() => {
+        newState = todoListReducer(
+          stateWithItems,
+          completeTodoItem({ isChecked: true, itemId: itemIdToRemain })
+        );
+      });
+
+      it("should set it as complete in the store", () => {
+        expect(newState.todoItems[1].isComplete).toBe(true);
+      });
     });
 
     describe("when you delete an item", () => {
