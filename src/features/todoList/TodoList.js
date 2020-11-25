@@ -15,6 +15,11 @@ export function TodoList() {
 
   const handleTodoInputChange = (e) => setTodoInputValue(e?.target?.value);
 
+  const handleAddButtonClick = () => {
+    setTodoInputValue("");
+    dispatch(addTodoItem(todoInputValue));
+  };
+
   const handleStatusChange = (e, itemId) =>
     dispatch(completeTodoItem({ isChecked: e?.target?.checked, itemId }));
 
@@ -24,9 +29,7 @@ export function TodoList() {
         value={todoInputValue}
         onChange={handleTodoInputChange}
       ></S.TodoInput>
-      <S.AddButton onClick={() => dispatch(addTodoItem(todoInputValue))}>
-        Add
-      </S.AddButton>
+      <S.AddButton onClick={handleAddButtonClick}>Add</S.AddButton>
       {todoItems.map((todoItem, i) => (
         <div key={i}>
           <S.Status
