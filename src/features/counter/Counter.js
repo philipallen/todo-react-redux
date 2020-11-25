@@ -8,6 +8,7 @@ import {
   selectCount,
 } from './counterSlice';
 import styles from './Counter.module.css';
+import * as S from './Counter.styled';
 
 export function Counter() {
   const count = useSelector(selectCount);
@@ -16,6 +17,7 @@ export function Counter() {
 
   return (
     <div>
+      <S.test>Hi this is a test</S.test>
       <div className={styles.row}>
         <button
           className={styles.button}
