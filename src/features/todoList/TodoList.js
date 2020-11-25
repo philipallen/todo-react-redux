@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   selectTodoItems,
+  selectCountOfIncompleteItems,
   addTodoItem,
   deleteTodoItem,
   completeTodoItem,
@@ -10,6 +11,7 @@ import * as S from "./TodoList.styled";
 
 export function TodoList() {
   const todoItems = useSelector(selectTodoItems);
+  const countOfIncompleteItems = useSelector(selectCountOfIncompleteItems);
   const [todoInputValue, setTodoInputValue] = useState("");
   const dispatch = useDispatch();
 
@@ -29,6 +31,7 @@ export function TodoList() {
         value={todoInputValue}
         onChange={handleTodoInputChange}
       ></S.TodoInput>
+      {/* TODO split below out to separate component */}
       <S.AddButton onClick={handleAddButtonClick}>Add</S.AddButton>
       {todoItems.map((todoItem, i) => (
         <div key={i}>
@@ -42,7 +45,9 @@ export function TodoList() {
           </S.DeleteButton>
         </div>
       ))}
-
+      <S.IncompeteItemsText>
+        "There are {countOfIncompleteItems} incomplete items"
+      </S.IncompeteItemsText>
       {/* <div>
         <button
           aria-label="Increment value"

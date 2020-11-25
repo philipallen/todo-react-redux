@@ -59,4 +59,11 @@ export const incrementAsync = (amount) => (dispatch) => {
 // in the slice file. For example: `useSelector((state) => state.todoList.value)`
 export const selectTodoItems = (state) => state?.todoList?.todoItems;
 
+export const selectCountOfIncompleteItems = (state) => {
+  const items = state?.todoList?.todoItems;
+  let countOfIncompleteItems = 0;
+  items.forEach((item) => !item.isComplete && countOfIncompleteItems++);
+  return countOfIncompleteItems;
+};
+
 export default todoListSlice.reducer;

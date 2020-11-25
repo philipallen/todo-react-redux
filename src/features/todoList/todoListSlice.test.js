@@ -3,6 +3,7 @@ import todoListReducer, {
   addTodoItem,
   deleteTodoItem,
   completeTodoItem,
+  selectCountOfIncompleteItems,
 } from "./todoListSlice";
 
 describe("addTodoItem", () => {
@@ -130,5 +131,27 @@ describe("addTodoItem", () => {
         expect(newState.todoItems[0].id).toBe(itemIdToRemain);
       });
     });
+  });
+});
+
+// TODO could move this to a separate file potentially
+describe("selectCountOfIncompleteItems tests", () => {
+  it("should return 0 if there are no items", () => {
+    const state = { todoList: { todoItems: [] } };
+    expect(selectCountOfIncompleteItems(state)).toBe(0);
+  });
+
+  it("should return 0 if all items are complete", () => {
+    const state = {
+      todoList: { todoItems: [{ isComplete: true }, { isComplete: true }] },
+    };
+    expect(selectCountOfIncompleteItems(state)).toBe(0);
+  });
+
+  it("should return the correct count of incomplete items", () => {
+    const state = {
+      todoList: { todoItems: [{ isComplete: false }, { isComplete: true }] },
+    };
+    expect(selectCountOfIncompleteItems(state)).toBe(1);
   });
 });

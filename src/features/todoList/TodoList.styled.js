@@ -13,3 +13,5 @@ export const AddButton = styled.button``;
 export const DeleteButton = styled.button``;
 
 export const Status = styled.input``;
+
+export const IncompeteItemsText = styled.span``;
