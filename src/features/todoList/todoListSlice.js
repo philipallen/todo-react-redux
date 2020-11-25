@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+export const initialState = {
+  todoItems: [],
+};
+
 export const todoListSlice = createSlice({
   name: "todoList",
-  initialState: {
-    todoItems: [],
-  },
-  // TODO add tests to these:
+  initialState,
   reducers: {
     addTodoItem: (state, action) => {
       const newItem = {
@@ -13,7 +14,7 @@ export const todoListSlice = createSlice({
         title: action?.payload,
         isComplete: false,
       };
-      state.todoItems.push(newItem);
+      state?.todoItems?.push(newItem);
     },
     deleteTodoItem: (state, action) => {
       const itemId = action.payload;
