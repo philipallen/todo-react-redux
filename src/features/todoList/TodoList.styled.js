@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
-export const TodoInput = styled.input`
+export const Input = styled.input`
   color: red;
 `;
 
-export const TodoItem = styled.div`
+export const ItemTitle = styled.div`
   color: blue;
 `;
 
@@ -12,6 +12,8 @@ export const AddButton = styled.button``;
 
 export const DeleteButton = styled.button``;
 
-export const Status = styled.input``;
+export const StatusCheckbox = styled.input``;
 
 export const IncompeteItemsText = styled.span``;
+
+export const MasterStatusCheckbox = styled.input``;

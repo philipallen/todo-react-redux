@@ -1,12 +1,12 @@
 import todoListReducer, {
   initialState,
-  addTodoItem,
-  deleteTodoItem,
-  completeTodoItem,
+  addItem,
+  deleteItem,
+  toggleItemStatus,
   selectCountOfIncompleteItems,
 } from "./todoListSlice";
 
-describe("addTodoItem", () => {
+describe("addItem", () => {
   describe("when there are no items", () => {
     it("should return no todo items", () => {
       const newState = todoListReducer(initialState, {});
@@ -20,19 +20,19 @@ describe("addTodoItem", () => {
 
     beforeEach(() => {
       newItem = "Buy milk";
-      newState = todoListReducer(initialState, addTodoItem(newItem));
+      newState = todoListReducer(initialState, addItem(newItem));
     });
 
     it("should return one item in the todo list", () => {
-      expect(newState.todoItems?.length).toBe(1);
+      expect(newState.items?.length).toBe(1);
     });
 
     it("should return the new item in the list", () => {
-      expect(newState.todoItems[0].title).toBe(newItem);
+      expect(newState.items[0].title).toBe(newItem);
     });
 
     it("should make sure the new item is not set to complete", () => {
-      expect(newState.todoItems[0].isComplete).toBe(false);
+      expect(newState.items[0].isComplete).toBe(false);
     });
   });
 
@@ -44,39 +44,31 @@ describe("addTodoItem", () => {
     beforeEach(() => {
       itemIdToDelete = 1;
       stateWithItems = {
-        todoItems: [
-          { id: itemIdToDelete, title: "Clean car", isComplete: false },
-        ],
+        items: [{ id: itemIdToDelete, title: "Clean car", isComplete: false }],
       };
-      newState = todoListReducer(
-        stateWithItems,
-        deleteTodoItem(itemIdToDelete)
-      );
+      newState = todoListReducer(stateWithItems, deleteItem(itemIdToDelete));
     });
 
     describe("when you mark the item as complete", () => {
       beforeEach(() => {
         newState = todoListReducer(
           stateWithItems,
-          completeTodoItem({ isChecked: true, itemId: itemIdToDelete })
+          toggleItemStatus({ isChecked: true, itemId: itemIdToDelete })
         );
       });
 
       it("should set it as complete in the store", () => {
-        expect(newState.todoItems[0].isComplete).toBe(true);
+        expect(newState.items[0].isComplete).toBe(true);
       });
     });
 
     describe("when you delete the item", () => {
       beforeEach(() => {
-        newState = todoListReducer(
-          stateWithItems,
-          deleteTodoItem(itemIdToDelete)
-        );
+        newState = todoListReducer(stateWithItems, deleteItem(itemIdToDelete));
       });
 
       it("should return an empty list", () => {
-        expect(newState.todoItems?.length).toBe(0);
+        expect(newState.items?.length).toBe(0);
       });
     });
   });
@@ -91,44 +83,38 @@ describe("addTodoItem", () => {
       itemIdToDelete = 1;
       itemIdToRemain = 2;
       stateWithItems = {
-        todoItems: [
+        items: [
           { id: itemIdToDelete, title: "Clean car", isComplete: false },
           { id: itemIdToRemain, title: "Eat", isComplete: false },
         ],
       };
-      newState = todoListReducer(
-        stateWithItems,
-        deleteTodoItem(itemIdToDelete)
-      );
+      newState = todoListReducer(stateWithItems, deleteItem(itemIdToDelete));
     });
 
     describe("when you mark the second item as complete", () => {
       beforeEach(() => {
         newState = todoListReducer(
           stateWithItems,
-          completeTodoItem({ isChecked: true, itemId: itemIdToRemain })
+          toggleItemStatus({ isChecked: true, itemId: itemIdToRemain })
         );
       });
 
       it("should set it as complete in the store", () => {
-        expect(newState.todoItems[1].isComplete).toBe(true);
+        expect(newState.items[1].isComplete).toBe(true);
       });
     });
 
     describe("when you delete an item", () => {
       beforeEach(() => {
-        newState = todoListReducer(
-          stateWithItems,
-          deleteTodoItem(itemIdToDelete)
-        );
+        newState = todoListReducer(stateWithItems, deleteItem(itemIdToDelete));
       });
 
       it("should return list, minus the one you deleted", () => {
-        expect(newState.todoItems?.length).toBe(1);
+        expect(newState.items?.length).toBe(1);
       });
 
       it("should return the item which was to remain", () => {
-        expect(newState.todoItems[0].id).toBe(itemIdToRemain);
+        expect(newState.items[0].id).toBe(itemIdToRemain);
       });
     });
   });
@@ -137,20 +123,20 @@ describe("addTodoItem", () => {
 // TODO could move this to a separate file potentially
 describe("selectCountOfIncompleteItems tests", () => {
   it("should return 0 if there are no items", () => {
-    const state = { todoList: { todoItems: [] } };
+    const state = { todoList: { items: [] } };
     expect(selectCountOfIncompleteItems(state)).toBe(0);
   });
 
   it("should return 0 if all items are complete", () => {
     const state = {
-      todoList: { todoItems: [{ isComplete: true }, { isComplete: true }] },
+      todoList: { items: [{ isComplete: true }, { isComplete: true }] },
     };
     expect(selectCountOfIncompleteItems(state)).toBe(0);
   });
 
   it("should return the correct count of incomplete items", () => {
     const state = {
-      todoList: { todoItems: [{ isComplete: false }, { isComplete: true }] },
+      todoList: { items: [{ isComplete: false }, { isComplete: true }] },
     };
     expect(selectCountOfIncompleteItems(state)).toBe(1);
   });

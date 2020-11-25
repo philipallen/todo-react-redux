@@ -1,24 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const initialState = {
-  todoItems: [],
+  items: [],
 };
 
 export const todoListSlice = createSlice({
   name: "todoList",
   initialState,
   reducers: {
-    addTodoItem: (state, action) => {
+    addItem: (state, action) => {
       const newItem = {
         id: new Date().getTime(), // TODO swap this for uuid
         title: action?.payload,
         isComplete: false,
       };
-      state?.todoItems?.push(newItem);
+      state?.items?.push(newItem);
     },
-    deleteTodoItem: (state, action) => {
+    deleteItem: (state, action) => {
       const itemId = action.payload;
-      const items = state.todoItems;
+      const items = state.items;
       items?.splice(
         items?.findIndex((i) => {
           return i.id === itemId;
@@ -26,22 +26,29 @@ export const todoListSlice = createSlice({
         1
       );
     },
-    completeTodoItem: (state, action) => {
+    toggleItemStatus: (state, action) => {
       const itemId = action.payload?.itemId;
-      const items = state.todoItems;
+      const items = state.items;
       items.forEach((item) => {
         if (item.id === itemId) {
           item.isComplete = action.payload?.isChecked;
         }
       });
     },
+    toggleAllItemsStatuses: (state, action) => {
+      const items = state.items;
+      items.forEach((item) => {
+        item.isComplete = action.payload;
+      });
+    },
   },
 });
 
 export const {
-  addTodoItem,
-  deleteTodoItem,
-  completeTodoItem,
+  addItem,
+  deleteItem,
+  toggleItemStatus,
+  toggleAllItemsStatuses,
 } = todoListSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
@@ -54,13 +61,10 @@ export const incrementAsync = (amount) => (dispatch) => {
   // }, 1000);
 };
 
-// The function below is called a selector and allows us to select a value from
-// the state. Selectors can also be defined inline where they're used instead of
-// in the slice file. For example: `useSelector((state) => state.todoList.value)`
-export const selectTodoItems = (state) => state?.todoList?.todoItems;
+export const selectItems = (state) => state?.todoList?.items;
 
 export const selectCountOfIncompleteItems = (state) => {
-  const items = state?.todoList?.todoItems;
+  const items = state?.todoList?.items;
   let countOfIncompleteItems = 0;
   items.forEach((item) => !item.isComplete && countOfIncompleteItems++);
   return countOfIncompleteItems;

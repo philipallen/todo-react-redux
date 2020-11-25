@@ -1,46 +1,48 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  selectTodoItems,
+  selectItems,
   selectCountOfIncompleteItems,
-  addTodoItem,
-  deleteTodoItem,
-  completeTodoItem,
+  addItem,
+  deleteItem,
+  toggleItemStatus,
+  toggleAllItemsStatuses,
 } from "./todoListSlice";
 import * as S from "./TodoList.styled";
 
 export function TodoList() {
-  const todoItems = useSelector(selectTodoItems);
+  const items = useSelector(selectItems);
   const countOfIncompleteItems = useSelector(selectCountOfIncompleteItems);
-  const [todoInputValue, setTodoInputValue] = useState("");
+  const [inputValue, setInputValue] = useState("");
   const dispatch = useDispatch();
 
-  const handleTodoInputChange = (e) => setTodoInputValue(e?.target?.value);
+  const handleInputChange = (e) => setInputValue(e?.target?.value);
 
   const handleAddButtonClick = () => {
-    setTodoInputValue("");
-    dispatch(addTodoItem(todoInputValue));
+    setInputValue("");
+    dispatch(addItem(inputValue));
   };
 
-  const handleStatusChange = (e, itemId) =>
-    dispatch(completeTodoItem({ isChecked: e?.target?.checked, itemId }));
+  const handleStatusCheckboxChange = (e, itemId) =>
+    dispatch(toggleItemStatus({ isChecked: e.target?.checked, itemId }));
+
+  const handleMasterStatusCheckboxChange = (e) =>
+    dispatch(toggleAllItemsStatuses(e.target?.checked));
 
   return (
     <div>
-      <S.TodoInput
-        value={todoInputValue}
-        onChange={handleTodoInputChange}
-      ></S.TodoInput>
+      <S.Input value={inputValue} onChange={handleInputChange}></S.Input>
       {/* TODO split below out to separate component */}
       <S.AddButton onClick={handleAddButtonClick}>Add</S.AddButton>
-      {todoItems.map((todoItem, i) => (
+      {items.map((item, i) => (
         <div key={i}>
-          <S.Status
+          <S.StatusCheckbox
             type="checkbox"
-            onChange={(e) => handleStatusChange(e, todoItem.id)}
-          ></S.Status>
-          <S.TodoItem>{todoItem.title}</S.TodoItem>
-          <S.DeleteButton onClick={() => dispatch(deleteTodoItem(todoItem.id))}>
+            checked={item.isComplete}
+            onChange={(e) => handleStatusCheckboxChange(e, item.id)}
+          ></S.StatusCheckbox>
+          <S.ItemTitle>{item.title}</S.ItemTitle>
+          <S.DeleteButton onClick={() => dispatch(deleteItem(item.id))}>
             Delete
           </S.DeleteButton>
         </div>
@@ -48,6 +50,10 @@ export function TodoList() {
       <S.IncompeteItemsText>
         "There are {countOfIncompleteItems} incomplete items"
       </S.IncompeteItemsText>
+      <S.MasterStatusCheckbox
+        type="checkbox"
+        onChange={handleMasterStatusCheckboxChange}
+      ></S.MasterStatusCheckbox>
       {/* <div>
         <button
           aria-label="Increment value"
