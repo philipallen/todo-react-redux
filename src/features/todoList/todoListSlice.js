@@ -10,7 +10,7 @@ export const todoListSlice = createSlice({
   reducers: {
     addTodoItem: (state, action) => {
       const newItem = {
-        id: new Date().getTime(),
+        id: new Date().getTime(), // TODO swap this for uuid
         title: action?.payload,
         isComplete: false,
       };

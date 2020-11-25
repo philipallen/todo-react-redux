@@ -1,4 +1,8 @@
-import todoListReducer, { initialState, addTodoItem } from "./todoListSlice";
+import todoListReducer, {
+  initialState,
+  addTodoItem,
+  deleteTodoItem,
+} from "./todoListSlice";
 
 describe("addTodoItem", () => {
   describe("when there are no items", () => {
@@ -27,6 +31,77 @@ describe("addTodoItem", () => {
 
     it("should make sure the new item is not set to complete", () => {
       expect(newState.todoItems[0].isComplete).toBe(false);
+    });
+  });
+
+  describe("when there is one item", () => {
+    let stateWithItems;
+    let newState;
+    let itemIdToDelete;
+
+    beforeEach(() => {
+      itemIdToDelete = 1;
+      stateWithItems = {
+        todoItems: [
+          { id: itemIdToDelete, title: "Clean car", isComplete: false },
+        ],
+      };
+      newState = todoListReducer(
+        stateWithItems,
+        deleteTodoItem(itemIdToDelete)
+      );
+    });
+
+    describe("when you delete the item", () => {
+      beforeEach(() => {
+        newState = todoListReducer(
+          stateWithItems,
+          deleteTodoItem(itemIdToDelete)
+        );
+      });
+
+      it("should return an empty list", () => {
+        expect(newState.todoItems?.length).toBe(0);
+      });
+    });
+  });
+
+  describe("when there are two items", () => {
+    let stateWithItems;
+    let newState;
+    let itemIdToDelete;
+    let itemIdToRemain;
+
+    beforeEach(() => {
+      itemIdToDelete = 1;
+      itemIdToRemain = 2;
+      stateWithItems = {
+        todoItems: [
+          { id: itemIdToDelete, title: "Clean car", isComplete: false },
+          { id: itemIdToRemain, title: "Eat", isComplete: false },
+        ],
+      };
+      newState = todoListReducer(
+        stateWithItems,
+        deleteTodoItem(itemIdToDelete)
+      );
+    });
+
+    describe("when you delete an item", () => {
+      beforeEach(() => {
+        newState = todoListReducer(
+          stateWithItems,
+          deleteTodoItem(itemIdToDelete)
+        );
+      });
+
+      it("should return list, minus the one you deleted", () => {
+        expect(newState.todoItems?.length).toBe(1);
+      });
+
+      it("should return the item which was to remain", () => {
+        expect(newState.todoItems[0].id).toBe(itemIdToRemain);
+      });
     });
   });
 });

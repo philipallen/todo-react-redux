@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectTodoItems, addTodoItem } from "./todoListSlice";
+import { selectTodoItems, addTodoItem, deleteTodoItem } from "./todoListSlice";
 import * as S from "./TodoList.styled";
 
 export function TodoList() {
@@ -21,7 +21,12 @@ export function TodoList() {
         Add
       </S.AddButton>
       {todoItems.map((todoItem, i) => (
-        <S.TodoItem key={i}>{todoItem.title}</S.TodoItem>
+        <>
+          <S.TodoItem key={i}>{todoItem.title}</S.TodoItem>
+          <S.DeleteButton onClick={() => dispatch(deleteTodoItem(todoItem.id))}>
+            Delete
+          </S.DeleteButton>
+        </>
       ))}
 
       {/* <div>
