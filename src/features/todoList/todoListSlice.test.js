@@ -3,6 +3,7 @@ import todoListReducer, {
   addItem,
   deleteItem,
   toggleItemStatus,
+  toggleAllItemsStatuses,
   selectCountOfIncompleteItems,
 } from "./todoListSlice";
 
@@ -89,6 +90,34 @@ describe("addItem", () => {
         ],
       };
       newState = todoListReducer(stateWithItems, deleteItem(itemIdToDelete));
+    });
+
+    describe("when you toggle all of them as complete", () => {
+      beforeEach(() => {
+        newState = todoListReducer(
+          stateWithItems,
+          toggleAllItemsStatuses(true)
+        );
+      });
+
+      it("should set them as complete in the store", () => {
+        expect(newState.items[0].isComplete).toBe(true);
+        expect(newState.items[1].isComplete).toBe(true);
+      });
+    });
+
+    describe("when you toggle all of them as todo", () => {
+      beforeEach(() => {
+        newState = todoListReducer(
+          stateWithItems,
+          toggleAllItemsStatuses(false)
+        );
+      });
+
+      it("should set them as todo in the store", () => {
+        expect(newState.items[0].isComplete).toBe(false);
+        expect(newState.items[1].isComplete).toBe(false);
+      });
     });
 
     describe("when you mark the second item as complete", () => {
