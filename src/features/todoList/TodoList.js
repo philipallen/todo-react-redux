@@ -11,10 +11,10 @@ import {
 import * as S from "./TodoList.styled";
 
 export function TodoList() {
+  const dispatch = useDispatch();
   const items = useSelector(selectItems);
   const countOfIncompleteItems = useSelector(selectCountOfIncompleteItems);
   const [inputValue, setInputValue] = useState("");
-  const dispatch = useDispatch();
 
   const handleInputChange = (e) => setInputValue(e?.target?.value);
 
@@ -54,39 +54,6 @@ export function TodoList() {
         type="checkbox"
         onChange={handleMasterStatusCheckboxChange}
       ></S.MasterStatusCheckbox>
-      {/* <div>
-        <button
-          aria-label="Increment value"
-          // onClick={() => dispatch(increment())}
-        >
-          +
-        </button>
-        <button
-          aria-label="Decrement value"
-          // onClick={() => dispatch(decrement())}
-        >
-          -
-        </button>
-      </div>
-      <div>
-        <input
-          aria-label="Set increment amount"
-          // value={incrementAmount}
-          // onChange={(e) => setIncrementAmount(e.target.value)}
-        />
-        <button
-        // onClick={() =>
-        // dispatch(incrementByAmount(Number(incrementAmount) || 0))
-        // }
-        >
-          Add Amount
-        </button>
-        <button
-        // onClick={() => dispatch(incrementAsync(Number(incrementAmount) || 0))}
-        >
-          Add Async
-        </button>
-      </div> */}
     </div>
   );
 }
