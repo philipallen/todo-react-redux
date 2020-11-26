@@ -19,8 +19,8 @@ export function TodoList() {
   const handleInputChange = (e) => setInputValue(e?.target?.value);
 
   const handleAddButtonClick = () => {
-    setInputValue("");
     dispatch(addItem(inputValue));
+    setInputValue("");
   };
 
   const handleStatusCheckboxChange = (e, itemId) =>
