@@ -7,6 +7,7 @@ import {
   deleteItem,
   toggleItemStatus,
   toggleAllItemsStatuses,
+  selectAreAllItemsComplete,
 } from "./todoListSlice";
 import * as S from "./TodoList.styled";
 
@@ -16,6 +17,7 @@ export function TodoList() {
   const dispatch = useDispatch();
   const items = useSelector(selectItems);
   const countOfIncompleteItems = useSelector(selectCountOfIncompleteItems);
+  const areAllItemsComplete = useSelector(selectAreAllItemsComplete);
   const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = (e) => setInputValue(e?.target?.value);
@@ -63,16 +65,21 @@ export function TodoList() {
           </S.DeleteButton>
         </S.ItemContainer>
       ))}
-      <S.IncompeteItemsText>
-        Number of incomplete items: {countOfIncompleteItems}
-      </S.IncompeteItemsText>
-      <S.MasterStatusCheckboxLabel>
-        <S.MasterStatusCheckbox
-          type="checkbox"
-          onChange={handleMasterStatusCheckboxChange}
-        ></S.MasterStatusCheckbox>
-        Complete all
-      </S.MasterStatusCheckboxLabel>
+      {items.length ? (
+        <>
+          <S.IncompeteItemsText>
+            Number of incomplete items: {countOfIncompleteItems}
+          </S.IncompeteItemsText>
+          <S.MasterStatusCheckboxLabel>
+            <S.MasterStatusCheckbox
+              type="checkbox"
+              onChange={handleMasterStatusCheckboxChange}
+              checked={areAllItemsComplete}
+            ></S.MasterStatusCheckbox>
+            Complete all
+          </S.MasterStatusCheckboxLabel>
+        </>
+      ) : null}
     </S.TodoList>
   );
 }

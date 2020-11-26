@@ -62,4 +62,9 @@ export const selectCountOfIncompleteItems = (state) => {
   return countOfIncompleteItems;
 };
 
+export const selectAreAllItemsComplete = (state) => {
+  const items = state?.todoList?.items;
+  return items.length ? items.every((item) => item.isComplete) : false;
+};
+
 export default todoListSlice.reducer;

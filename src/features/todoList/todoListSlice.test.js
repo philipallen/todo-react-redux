@@ -5,6 +5,7 @@ import todoListReducer, {
   toggleItemStatus,
   toggleAllItemsStatuses,
   selectCountOfIncompleteItems,
+  selectAreAllItemsComplete,
 } from "./todoListSlice";
 
 describe("addItem", () => {
@@ -167,5 +168,28 @@ describe("selectCountOfIncompleteItems tests", () => {
       todoList: { items: [{ isComplete: false }, { isComplete: true }] },
     };
     expect(selectCountOfIncompleteItems(state)).toBe(1);
+  });
+});
+
+describe("selectAreAllItemsComplete tests", () => {
+  it("should return false if there are no items", () => {
+    const state = {
+      todoList: { items: [] },
+    };
+    expect(selectAreAllItemsComplete(state)).toBe(false);
+  });
+
+  it("should true if all items are complete", () => {
+    const state = {
+      todoList: { items: [{ isComplete: true }, { isComplete: true }] },
+    };
+    expect(selectAreAllItemsComplete(state)).toBe(true);
+  });
+
+  it("should return false if there is at least one false item", () => {
+    const state = {
+      todoList: { items: [{ isComplete: false }, { isComplete: true }] },
+    };
+    expect(selectAreAllItemsComplete(state)).toBe(false);
   });
 });
