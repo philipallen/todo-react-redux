@@ -10,6 +10,8 @@ import {
 } from "./todoListSlice";
 import * as S from "./TodoList.styled";
 
+// TODO split below out to separate components? Could've done but I felt the file size was manageable plus nothing is actually duplicated
+
 export function TodoList() {
   const dispatch = useDispatch();
   const items = useSelector(selectItems);
@@ -18,8 +20,11 @@ export function TodoList() {
 
   const handleInputChange = (e) => setInputValue(e?.target?.value);
 
+  const handleKeyDown = (e) => e.key === "Enter" && handleAddButtonClick();
+
   const handleAddButtonClick = () => {
-    dispatch(addItem(inputValue));
+    const value = inputValue.trim();
+    value.length && dispatch(addItem(inputValue));
     setInputValue("");
   };
 
@@ -30,39 +35,44 @@ export function TodoList() {
     dispatch(toggleAllItemsStatuses(e.target?.checked));
 
   return (
-    <div>
+    <S.TodoList>
       <S.Input
         value={inputValue}
         onChange={handleInputChange}
-        data-cy="todo-input"
+        onKeyDown={handleKeyDown}
+        data-cy="input"
       ></S.Input>
-      {/* TODO split below out to separate component */}
-      <S.AddButton onClick={handleAddButtonClick} data-cy="todo-add-btn">
+      <S.AddButton onClick={handleAddButtonClick} data-cy="add-btn">
         Add
       </S.AddButton>
       {items.map((item, i) => (
-        <div key={i} data-cy="todo-item">
-          <S.StatusCheckbox
-            type="checkbox"
-            checked={item.isComplete}
-            onChange={(e) => handleStatusCheckboxChange(e, item.id)}
-          ></S.StatusCheckbox>
-          <S.ItemTitle data-cy="todo-item-title">{item.title}</S.ItemTitle>
+        <S.ItemContainer key={i} data-cy="item">
+          <S.ItemTitle data-cy="item-title" isComplete={item.isComplete}>
+            <S.StatusCheckbox
+              type="checkbox"
+              checked={item.isComplete}
+              onChange={(e) => handleStatusCheckboxChange(e, item.id)}
+            ></S.StatusCheckbox>
+            {item.title}
+          </S.ItemTitle>
           <S.DeleteButton
             onClick={() => dispatch(deleteItem(item.id))}
-            data-cy="todo-delete-btn"
+            data-cy="delete-btn"
           >
             Delete
           </S.DeleteButton>
-        </div>
+        </S.ItemContainer>
       ))}
       <S.IncompeteItemsText>
-        "There are {countOfIncompleteItems} incomplete items"
+        Number of incomplete items: {countOfIncompleteItems}
       </S.IncompeteItemsText>
-      <S.MasterStatusCheckbox
-        type="checkbox"
-        onChange={handleMasterStatusCheckboxChange}
-      ></S.MasterStatusCheckbox>
-    </div>
+      <S.MasterStatusCheckboxLabel>
+        <S.MasterStatusCheckbox
+          type="checkbox"
+          onChange={handleMasterStatusCheckboxChange}
+        ></S.MasterStatusCheckbox>
+        Complete all
+      </S.MasterStatusCheckboxLabel>
+    </S.TodoList>
   );
 }

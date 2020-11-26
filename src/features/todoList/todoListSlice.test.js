@@ -149,7 +149,6 @@ describe("addItem", () => {
   });
 });
 
-// TODO could move this to a separate file potentially
 describe("selectCountOfIncompleteItems tests", () => {
   it("should return 0 if there are no items", () => {
     const state = { todoList: { items: [] } };
