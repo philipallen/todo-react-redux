@@ -26,6 +26,10 @@ React in the FE. Possibly a state management tool, depending on the sales teams'
 
 A css-in-js library to allow for easier manipulation of styles based on app logic. Allows the FE application to be built as a JS bundle which makes the app easier to be consumed by applications running on native or web applications.
 
+#### storybook
+
+Aid FE development. Encourages shareable components. Allows designers to interact with components.
+
 ## Visualization of the data
 
 #### d3 or react-d3-library
